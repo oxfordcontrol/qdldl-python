@@ -1,5 +1,6 @@
 #include "qdldl.hpp"
 
+#include "qdldl/include/qdldl_configure.h"
 using namespace qdldl;
 
 
@@ -31,7 +32,11 @@ Solver::Solver(QDLDL_int n, QDLDL_int * Ap, QDLDL_int *Ai, QDLDL_float * Ax){
 	Pinv = new QDLDL_int[n];
 
 	// Permutation
+#ifdef DLONG
 	QDLDL_int amd_status = amd_l_order(nx, Ap, Ai, P, NULL, NULL);
+#else
+	QDLDL_int amd_status = amd_order(nx, Ap, Ai, P, NULL, NULL);
+#endif
 	if (amd_status < 0)
 		throw std::runtime_error(std::string("Error in AMD computation ") + std::to_string(amd_status));
 
